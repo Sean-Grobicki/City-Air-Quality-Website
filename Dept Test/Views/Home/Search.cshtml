@@ -1,0 +1,49 @@
+﻿@using Dept_Test.Models
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="search-layout">
+    <h1 class="main-title"> City Air Quality Results </h1>
+
+    <p>Enter the name of the city you want to view air quality results for. </p>
+
+    @model LatestResult
+
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    {
+        @Html.TextBoxFor(model => model.cityName)
+        <button type="submit">Search</button>
+    }
+    <div class="city-container">
+        @foreach (var latest in Model.results as IList<Latest>)
+        {
+            <div class="city-display">
+                <h2>
+                    @if (latest.location == null)
+                    {
+                        @latest.city
+                    }
+                    else
+                    {
+                        @latest.location
+                    }
+                </h2>
+                <div class="city-horizontal">
+                    <ul class="list-info">
+                        <li>Country: @latest.country </li>
+                        <li>City: @latest.city </li>
+                        <li>Location: @latest.location</li>
+                    </ul>
+                    <h3>Latest Measurements</h3>
+                    <ul class="list-info">
+                        @foreach (var ms in latest.measurements as IList<Measurement>)
+                        {
+                            <li> @ms.parameter : @ms.value@ms.unit recorded on @ms.lastUpdated </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
